@@ -2,9 +2,10 @@ import style from './ContactForm.module.css'; // Імпорт стилів з CS
 import { Form, Formik, Field, ErrorMessage } from 'formik'; // Імпорт компонентів із бібліотеки Formik
 import { useDispatch } from 'react-redux'; // Імпорт хука для відправки дій у Redux
 import * as Yup from "yup"; // Імпорт Yup для валідації
-import { nanoid } from 'nanoid'; // Імпорт функції для створення унікального ідентифікатора
+// import { nanoid } from 'nanoid'; // Імпорт функції для створення унікального ідентифікатора
 
-import { addContact } from '../../redux/contactsSlice.js'
+// import { addContact } from '../../redux/contactsSlice.js'
+import { addContacts } from '../../redux/contactsOps.js';
 // Регулярний вираз для перевірки правильності номера телефону
 const numberRegex = /^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
 
@@ -27,21 +28,33 @@ const INITIAL_VALUES = {
 
 // Компонент форми ContactForm
 const ContactForm = () => {
-  const dispatch = useDispatch(); // Ініціалізація dispatch для відправки дій у Redux
+  // const dispatch = useDispatch(); // Ініціалізація dispatch для відправки дій у Redux
 
-  // Функція для додавання нового контакту
-  const addUser = (values, actions) => {
-    // Створення нового об'єкта користувача з унікальним id
-    const finalUser = {
-      ...values,
-      id: nanoid(), // Додаємо унікальний ідентифікатор
+  // // Функція для додавання нового контакту
+  // const addUser = (values, actions) => {
+  //   // Створення нового об'єкта користувача з унікальним id
+  //   const finalUser = {
+  //     ...values,
+  //     id: nanoid(), // Додаємо унікальний ідентифікатор
+  //   };
+
+  //   // Відправка дії в Redux для додавання контакту
+  //   const action = addContact(finalUser);
+  //   dispatch(action);
+
+  //   // Скидання форми після успішного додавання
+  //   actions.resetForm();
+  // };
+
+    const dispatch = useDispatch();
+
+  const handleSubmit = (values, actions) => {
+    // event.preventDefault();
+    const newContact = {
+      name: values.name,
+      number: values.number,
     };
-
-    // Відправка дії в Redux для додавання контакту
-    const action = addContact(finalUser);
-    dispatch(action);
-
-    // Скидання форми після успішного додавання
+    dispatch(addContacts(newContact));
     actions.resetForm();
   };
 
@@ -49,7 +62,7 @@ const ContactForm = () => {
     <Formik
       validationSchema={addUserShema} // Валідація форми за допомогою Yup
       initialValues={INITIAL_VALUES} // Початкові значення полів форми
-      onSubmit={addUser} // Функція, яка буде викликана при відправці форми
+      onSubmit={handleSubmit} // Функція, яка буде викликана при відправці форми
     >
       {/* Компонент Form із бібліотеки Formik */}
       <Form className={style.from}>

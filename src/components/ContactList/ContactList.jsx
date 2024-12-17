@@ -1,25 +1,17 @@
 import { useSelector } from 'react-redux';
 import Contact from '../Contact/Contact';
+import { selectFilteredContacts } from '../../redux/selectors';
 
 const ContactList = () => {
   //  контакти та фільтр зі стану Redux
-  const contacts = useSelector((state) => state.contactsData.contacts.items || []);
-  const filter = useSelector((state) => state.filter.filter);
-
-  // Фільтруємо контакти 
-  const normalizedFilter = filter.toLowerCase();
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(normalizedFilter)
-  );
+ const filteredContacts = useSelector(selectFilteredContacts);
 
   return (
     <div>
       <h2>Contact List</h2>
-      <ul>
-        {filteredContacts.map((contact) => (
-          <Contact key={contact.id} contactItem={contact} />
-        ))}
-      </ul>
+        {filteredContacts?.map(({ id, name, number }) => (
+        <Contact key={id} name={name} number={number} id={id} />
+      ))}
     </div>
   );
 };

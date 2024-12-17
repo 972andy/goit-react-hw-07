@@ -1,20 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux';
 import style from './SearchBox.module.css';
-import { setFilter } from '../../redux/filtersSlice';
+// import { setFilter } from '../../redux/filtersSlice';
+import { selectNameFilter } from '../../redux/selectors';
+import { changeFilter } from '../../redux/filtersSlice';
 
 
 const SearchBox = () => {
-  const dispatch = useDispatch();
-  const filter = useSelector((state) => state.filter.filter);
-
-  // Обробник зміни інпуту
-  const handleChange = (event) => {
-    const searchQuery = event.target.value;
-    // const action = { type: 'filter/setFilter', payload: searchQuery };
-    const action = setFilter(searchQuery);
-    // Оновлюємо значення фільтра в Redux
-    dispatch(action);
-  };
+   const dispatch = useDispatch();
+  const filter = useSelector(selectNameFilter);
+  const handleChange = evt => dispatch(changeFilter(evt.target.value));
 
   return (
     <div className={style.searchContainer}>
